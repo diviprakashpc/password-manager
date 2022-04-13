@@ -1,0 +1,31 @@
+.card{
+   border-radius: 7%;
+   border: 1px solid black;
+   width:14.5vw;
+   height: 36.5vh;
+   
+   margin: 10px;
+   border-radius: 20px;
+   box-shadow: 0 0 10px 3px grey;
+   background: white;
+}
+
+
+.card:hover{
+    transition-property: height,width;
+    transition-duration: 150ms;
+    transition-delay: 0.1ms;
+    transition-timing-function:linear;
+    height: 38.5vh;
+    width: 15.5vw;
+    z-index: +2;
+    box-shadow: 0 0 15px 5px grey;
+}
+
+.card > img{
+    border-radius: 50%;
+    border: .5px solid white;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+}

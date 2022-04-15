@@ -1,37 +1,38 @@
 import React from "react";
-import { useContext,useState } from "react";
+import { useContext, useState } from "react";
 import "./AddCard.css";
 import { currentUser, setsLoginUser } from "../../App";
 import Axios from "axios";
 const AddCard = () => {
   const user = useContext(currentUser);
+  console.log(user);
   const [item, setItem] = useState({
     email: "",
-    username: "",
+    website: "",
     password: "",
   });
   const handleChange = (e) => {
-    console.log("Item created",item);
-    const {name,value} = e.target;
+    // console.log("Item created", item);
+    const { name, value } = e.target;
+    console.log("current item",item)
     setItem({
       ...item,
-      [name]:value
+      [name]: value,
     });
-    
   };
   const addPassword = () => {
-    const {email,username,password} = item;
-    if(email&&username&&password){
-        Axios.post("http://localhost:9002/additem",{user,item})
-        .then((res)=>{
-          alert(res.data.message)
+    const { email, website, password } = item;
+    if (email && website && password) {
+      // console.log("usersending post request",user);
+      Axios.post("http://localhost:9002/additem", { user, item })
+        .then((res) => {
+          alert(res.data.message);
         })
-        .catch((error)=>{
-          console.log("Error occured while adding",error);
-        })
-    }
-    else{
-      alert("Invalid Request")
+        .catch((error) => {
+          console.log("Error occured while adding", error);
+        });
+    } else {
+      alert("Invalid Request");
     }
   };
   return (
@@ -42,7 +43,17 @@ const AddCard = () => {
           <form className="add-password-form">
             <div className="form-group form-group-add-password">
               <input
-                type="email"
+                type="text"
+                className="form-control"
+                name="website"
+                aria-describedby="emailHelp"
+                placeholder="Website"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group form-group-add-password">
+              <input
+                type="text"
                 className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
@@ -51,16 +62,7 @@ const AddCard = () => {
                 name="email"
               />
             </div>
-            <div className="form-group form-group-add-password">
-              <input
-                type="text"
-                className="form-control"
-                name="username"
-                aria-describedby="emailHelp"
-                placeholder="Username"
-                onChange={handleChange}
-              />
-            </div>
+
             <div className="form-group form-group-add-password">
               <input
                 type="password"

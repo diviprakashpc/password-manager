@@ -22,13 +22,6 @@ mongoose.connect(
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
-  list: [
-    {
-      email: String,
-      username: String,
-      password: String,
-    },
-  ],
   password: String,
 });
 
@@ -59,7 +52,6 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
-  const list = [{}];
   User.findOne({ email: email }, (err, foundUser) => {
     if (foundUser) {
       res.send({ message: "User already registered" });
@@ -67,9 +59,8 @@ app.post("/register", (req, res) => {
       const user = new User({
         name,
         email,
-        list,
         password,
-      });
+      });  
       console.log("regsitration user", user);
       user.save((err) => {
         if (err) {
@@ -84,23 +75,21 @@ app.post("/register", (req, res) => {
 
 app.post("/additem", (req, res) => {
   const { user, item } = req.body;
-  const { itememail, itemusername, itempassword } = item;
+  const { itememail, itemwebsite, itempassword } = item;
   const { email, password } = user;
-  User.findOneAndUpdate(
-    { email: email },
-    {
-      list: list.push(
-        {
-          email: itememail,
-          username: itemusername,
-          password: itempassword,
-        },
-        (err) => {
-          console.log("Error during adding item");
-        }
-      ),
-    }
-  );
+  // User.findOneAndUpdate(
+  //   { email: email },
+  //   {
+  //     list: [
+  //       ...list,
+  //       { email: itememail, website: itemwebsite, password: itempassword },
+  //     ],
+  //   },
+
+  //   (err) => {
+  //     console.log("Error during adding item",err);
+  //   }
+  // );
 });
 
 // --------------------------------------------------------------------------------------------------------------------

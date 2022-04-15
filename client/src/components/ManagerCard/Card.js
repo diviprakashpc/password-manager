@@ -9,34 +9,32 @@ const Card = () => {
             <img src="/lock.png" className="card-img-top" alt="..."></img>
           </div>
           <div className="card-body manager-card-body">
+            <div id="username-field">
+              <input
+                class="form-control"
+                type="text"
+                value="Website"
+                aria-label="Disabled input example"
+                disabled
+                readonly
+              ></input>
+            </div>
             <div id="email-field">
               {" "}
               <input
                 class="form-control"
                 type="text"
-                value="email"
+                value="Email"
                 aria-label="Disabled input example"
                 disabled
                 readonly
               ></input>
-             
-            </div>
-            <div id="username-field">
-              <input
-                class="form-control"
-                type="text"
-                value="username"
-                aria-label="Disabled input example"
-                disabled
-                readonly
-              ></input>
-              
             </div>
             <div id="passowrd-field">
               <input
                 class="form-control"
                 type="text"
-                value="password"
+                value="Password"
                 aria-label="Disabled input example"
                 disabled
                 readonly

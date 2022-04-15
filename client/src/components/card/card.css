@@ -1,4 +1,4 @@
-.card{
+.home-card{
    border-radius: 7%;
    border: 1px solid black;
    width:14.5vw;
@@ -11,7 +11,7 @@
 }
 
 
-.card:hover{
+.home-card:hover{
     transition-property: height,width;
     transition-duration: 150ms;
     transition-delay: 0.1ms;
@@ -22,7 +22,7 @@
     box-shadow: 0 0 15px 5px grey;
 }
 
-.card > img{
+.home-card > img{
     border-radius: 50%;
     border: .5px solid white;
     width: 50%;

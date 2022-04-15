@@ -1,9 +1,9 @@
-import React from "react";
+import React, { createContext } from "react";
 //import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
-import Homepage from "./components/hompage/homepage";
+import Homepage from "./components/homepage/homepage";
 import Manager from "./components/manager/manager";
 import Generator from "./components/Generator/generator";
 import Error from "./components/Error/error";
@@ -15,40 +15,60 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useState } from "react";
+const currentUser = createContext();
+const setsLoginUser = createContext();
 function App() {
   const [user, setLoginUser] = useState({});
   return (
     <>
       <div className="App">
-        <Router>
-          <Routes>
-            <Route exact path="/homepage" element={<Homepage />} />
-            <Route exact path="/homepage/manager" element={<Manager />} />
-            <Route exact path="/homepage/generator" element={<Generator />} />
-            <Route path="*" element={<Error/>}/>
-          </Routes>
-        </Router>
-        {/* </Router><Homepage setLoginUser={setLoginUser} /> */}
-        {/* <Router>
-          <Routes>
-            <Route exact path="/">
-              {user && user._id ? 
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              user && user._id ? (
                 <Homepage setLoginUser={setLoginUser} />
-               : 
+              ) : (
                 <Login setLoginUser={setLoginUser} />
-              }
-            </Route>
-            <Route path="/login">
-              <Login setLoginUser={setLoginUser} />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-          </Routes>
-        </Router> */}
+              )
+            }
+          />
+
+          <Route
+            path="/login"
+            element={<Login setLoginUser={setLoginUser} />}
+          />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/manager"
+            element={
+              // user && user._id ? (
+                <currentUser.Provider value={user}>
+                  <setsLoginUser.Provider value={setLoginUser}>
+                    <Manager setLoginUser={setLoginUser} />
+                  </setsLoginUser.Provider>
+                </currentUser.Provider>
+              // ) : (
+              //   <Login setLoginUser={setLoginUser} />
+              // )
+            }
+          />
+          <Route
+            path="/generator"
+            element={
+              user && user._id ? (
+                <Generator setLoginUser={setLoginUser} />
+              ) : (
+                <Login setLoginUser={setLoginUser} />
+              )
+            }
+          />
+        </Routes>
       </div>
     </>
   );
 }
 
 export default App;
+export {currentUser,setsLoginUser};

@@ -1,5 +1,5 @@
-#add-card{
-    width: 85%;
+.add-card{
+    width: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,7 +17,7 @@
     margin: 5px;
 }
 
-#add-card:hover {
+.add-card:hover {
     transition-property: height, width;
     transition-duration: 150ms;
     transition-delay: 0.1ms;

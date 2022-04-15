@@ -3,7 +3,7 @@ import "./homepage.css";
 
 import Content from "../../utils/content/content";
 import Card from "../card/card";
-import Manager from "../manager/Manager";
+import Manager from "../manager/manager";
 import Generator from "../Generator/generator";
 const Homepage = ({ setLoginUser }) => {
   return (

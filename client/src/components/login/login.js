@@ -11,21 +11,17 @@ const Login = ({ setLoginUser }) => {
   });
 
   const handleChange = (e) => {
-   
-
     const { name, value } = e.target;
-    console.log("prev",{user});
+    console.log("prev", { user });
 
     setUser({
       ...user,
       [name]: value,
     });
-    
   };
 
   const login = () => {
-    Axios.post("http://localhost:9002/login", user)
-      .then((res) => {
+    Axios.post("http://localhost:9002/login", user).then((res) => {
       alert(res.data.message);
       setLoginUser(res.data.user);
       navigate("/");
@@ -63,7 +59,5 @@ const Login = ({ setLoginUser }) => {
     </>
   );
 };
-
-
 
 export default Login;

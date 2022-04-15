@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Card = (props) => {
    let navigate = useNavigate();
   return (
-      <div className="card">
+      <div className="card home-card">
         <img
           src={props.source}
           className="card-img-top"

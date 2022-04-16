@@ -1,6 +1,6 @@
 import React from "react";
 import "./Card.css";
-const Card = () => {
+const Card = (props) => {
   return (
     <div>
       <div>
@@ -13,7 +13,7 @@ const Card = () => {
               <input
                 class="form-control"
                 type="text"
-                value="Website"
+                value={`${props.website}`}
                 aria-label="Disabled input example"
                 disabled
                 readonly
@@ -24,7 +24,7 @@ const Card = () => {
               <input
                 class="form-control"
                 type="text"
-                value="Email"
+                value={`${props.email}`}
                 aria-label="Disabled input example"
                 disabled
                 readonly
@@ -34,7 +34,7 @@ const Card = () => {
               <input
                 class="form-control"
                 type="text"
-                value="Password"
+                value={`${props.password}`}
                 aria-label="Disabled input example"
                 disabled
                 readonly

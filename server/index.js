@@ -98,6 +98,13 @@ app.post("/additem", (req, res) => {
           ],
         },
         () => {
+
+          User.findOne({email:user.email},(err,foundUser)=>{
+            if(foundUser) res.send(foundUser)
+            else{
+              console.log("error while sending response back on add card")
+            }
+          })
           console.log("found user after update", foundUser);
         }
       );

@@ -3,9 +3,9 @@ import { useContext, useState } from "react";
 import "./AddCard.css";
 import { currentUser, setsLoginUser } from "../../App";
 import Axios from "axios";
-const AddCard = () => {
+const AddCard = ({ setCardList }) => {
   const user = useContext(currentUser);
-  console.log("User whose session is there",user);
+  console.log("User whose session is there", user);
   const [item, setItem] = useState({
     email: "",
     website: "",
@@ -26,7 +26,9 @@ const AddCard = () => {
       // console.log("usersending post request",user);
       Axios.post("http://localhost:9002/additem", { user, item })
         .then((res) => {
-          alert(res.data.message);
+          console.log(res.data);
+          console.log("User sent back by the add card post request", res.data);
+          setCardList(res.data.list);
         })
         .catch((error) => {
           console.log("Error occured while adding", error);

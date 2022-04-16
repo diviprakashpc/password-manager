@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import "./manager.css";
 import Navbar from "../Navbar/navbar";
 import ManagerCard from "../ManagerCard/Card";
@@ -8,10 +8,10 @@ import { currentUser, setsLoginUser } from "../../App";
 const Manager = () => {
   const user = useContext(currentUser);
   const setLoginUser = useContext(setsLoginUser);
-
-  // const [cards, setCards] = useState([]);
-
-  console.log("user at manager", user);
+ 
+  const [cardList, setCardList] = useState(user.list);
+  // console.log("Initial List of user",user.list,"cardList intial",cardList.length);
+  // console.log("user at manager", user);
   return (
     <>
       <div id="manager">
@@ -21,20 +21,17 @@ const Manager = () => {
         <section id="manager-section2">
           <div id="manager-cards">
             <div className="row manager-card-row">
-              <div className="col-lg-15">
-                <ManagerCard />
-              </div>
-              {/* {cards.map(card) => {
+              {cardList.splice(0).reverse().map((key,index) => {
                 return (
                   <div className="col-lg-15">
-                    <ManagerCard />
+                    <ManagerCard email={key.email} website={key.website} password={key.password} />
                   </div>
-                )
-              }} */}
+                );
+              })}
             </div>
           </div>
           <div id="manager-add-card">
-            <AddCard />
+            <AddCard setCardList={setCardList} />
           </div>
         </section>
         <section id="manager-section3">

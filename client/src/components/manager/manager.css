@@ -29,7 +29,7 @@
 }
 
 #manager-section3>button{
-    margin-left: 10px;
+    
     margrin-right:10px
 }
 
@@ -43,6 +43,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#page-no{
+  margin: 10px;
+  width: fit-content;
+
+  text-align: center;
 }
 
 .col-xs-15,

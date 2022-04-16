@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
+  list: Array,
 });
 
 userSchema.plugin(encrypt, {
@@ -51,7 +52,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, list } = req.body;
   User.findOne({ email: email }, (err, foundUser) => {
     if (foundUser) {
       res.send({ message: "User already registered" });
@@ -59,8 +60,9 @@ app.post("/register", (req, res) => {
       const user = new User({
         name,
         email,
+        list,
         password,
-      });  
+      });
       console.log("regsitration user", user);
       user.save((err) => {
         if (err) {
@@ -75,21 +77,34 @@ app.post("/register", (req, res) => {
 
 app.post("/additem", (req, res) => {
   const { user, item } = req.body;
-  const { itememail, itemwebsite, itempassword } = item;
-  const { email, password } = user;
-  // User.findOneAndUpdate(
-  //   { email: email },
-  //   {
-  //     list: [
-  //       ...list,
-  //       { email: itememail, website: itemwebsite, password: itempassword },
-  //     ],
-  //   },
+  console.log("user reached at backend", user);
 
-  //   (err) => {
-  //     console.log("Error during adding item",err);
-  //   }
-  // );
+  console.log("item reached at backend", item);
+
+  User.findOne({ email: user.email }, (err, foundUser) => {
+    if (foundUser) {
+      const { name, email, password, list } = foundUser;
+      console.log("Found user", foundUser);
+      User.updateOne(
+        { email: email },
+        {
+          list: [
+            ...list,
+            {
+              email: `${item["email"]}`,
+              website: `${item["website"]}`,
+              password: `${item["password"]}`,
+            },
+          ],
+        },
+        () => {
+          console.log("found user after update", foundUser);
+        }
+      );
+    } else {
+      console.log("error during add item", err);
+    }
+  });
 });
 
 // --------------------------------------------------------------------------------------------------------------------

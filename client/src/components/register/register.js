@@ -11,6 +11,7 @@ const Register = () => {
     email: "",
     password: "",
     reEnterPassword: "",
+    list:[],
   });
 
   const handleChange = (e) => {

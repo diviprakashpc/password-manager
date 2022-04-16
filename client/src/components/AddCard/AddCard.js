@@ -5,7 +5,7 @@ import { currentUser, setsLoginUser } from "../../App";
 import Axios from "axios";
 const AddCard = () => {
   const user = useContext(currentUser);
-  console.log(user);
+  console.log("User whose session is there",user);
   const [item, setItem] = useState({
     email: "",
     website: "",
@@ -14,7 +14,7 @@ const AddCard = () => {
   const handleChange = (e) => {
     // console.log("Item created", item);
     const { name, value } = e.target;
-    console.log("current item",item)
+    console.log("current item", item);
     setItem({
       ...item,
       [name]: value,

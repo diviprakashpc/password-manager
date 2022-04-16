@@ -8,6 +8,9 @@ import { currentUser, setsLoginUser } from "../../App";
 const Manager = () => {
   const user = useContext(currentUser);
   const setLoginUser = useContext(setsLoginUser);
+
+  // const [cards, setCards] = useState([]);
+
   console.log("user at manager", user);
   return (
     <>
@@ -21,6 +24,13 @@ const Manager = () => {
               <div className="col-lg-15">
                 <ManagerCard />
               </div>
+              {/* {cards.map(card) => {
+                return (
+                  <div className="col-lg-15">
+                    <ManagerCard />
+                  </div>
+                )
+              }} */}
             </div>
           </div>
           <div id="manager-add-card">

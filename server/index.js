@@ -41,7 +41,7 @@ app.post("/login", (req, res) => {
   User.findOne({ email: email }, (err, user) => {
     if (user) {
       if (password === user.password) {
-        res.send({ message: "Login Succesfull", user: user });
+        res.send({ message: "Login Successful", user: user });
       } else {
         res.send({ message: "Password didn't match" });
       }
@@ -98,13 +98,46 @@ app.post("/additem", (req, res) => {
           ],
         },
         () => {
-
-          User.findOne({email:user.email},(err,foundUser)=>{
-            if(foundUser) res.send(foundUser)
-            else{
-              console.log("error while sending response back on add card")
+          User.findOne({ email: user.email }, (err, foundUser) => {
+            if (foundUser) res.send(foundUser);
+            else {
+              console.log("error while sending response back on add card");
             }
-          })
+          });
+          console.log("found user after update", foundUser);
+        }
+      );
+    } else {
+      console.log("error during add item", err);
+    }
+  });
+});
+
+app.post("/saveitem", (req, res) => {
+  const { user, editItem } = req.body;
+  User.findOne({ email: user.email }, (err, foundUser) => {
+    if (foundUser) {
+      const { name, email, password, list } = foundUser;
+      console.log("Found user", foundUser);
+      User.updateOne(
+        { email: email },
+        {
+          list: [
+            ...list,
+            {
+              email: `${editItem["email"]}`,
+              website: `${editItem["website"]}`,
+              password: `${editItem["password"]}`,
+            },
+          ],
+        },
+        () => {
+          User.findOne({ email: user.email }, (err, foundUser) => {
+            if (foundUser) res.send(foundUser);
+            else {
+              console.log("error while sending response back on add card");
+            }
+          });
           console.log("found user after update", foundUser);
         }
       );
@@ -115,10 +148,6 @@ app.post("/additem", (req, res) => {
 });
 
 // --------------------------------------------------------------------------------------------------------------------
-
-app.get("/manager", (req, res) => {
-  res.send("<h1>Manager</h1>");
-});
 
 app.listen(9002, () => {
   console.log("Server started at porst 9002");

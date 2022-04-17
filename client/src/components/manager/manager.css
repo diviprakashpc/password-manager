@@ -21,18 +21,16 @@
 #manager-section3 {
   height: 9vh;
   width: 100vw;
- 
+
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-#manager-section3>button{
-    
-    margrin-right:10px
+#manager-section3 > button {
+  margrin-right: 10px;
 }
-
 
 .manager-card-row {
   width: 80vw;
@@ -45,7 +43,7 @@
   justify-content: center;
 }
 
-#page-no{
+#page-no {
   margin: 10px;
   width: fit-content;
 

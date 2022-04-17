@@ -32,6 +32,7 @@ const Manager = () => {
                   return (
                     <div className="col-lg-15">
                       <ManagerCard
+                       index = {index}
                         email={key.email}
                         website={key.website}
                         password={key.password}

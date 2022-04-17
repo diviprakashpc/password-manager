@@ -111,18 +111,35 @@ app.post("/additem", (req, res) => {
   });
 });
 
-app.post("/saveitem", (req, res) => {
+app.post("/saveitem", async (req, res) => {
   const { user, editItem } = req.body;
-  console.log("User reached at saveitem",user)
-  console.log("editItem reached at saveitem",editItem);
-  User.findOne({email:user.email},(err,foundUser)=>{
-    if(foundUser){
-         console.log("found user at saveitem",foundUser);
-    }else{
-      console.log(err);
-    }
-  })
+  const { email, list } = user;
+  // console.log("User reached at saveitem", user);
+  // console.log("editItem reached at saveitem", editItem);
+  const newlist = user.list.slice(0);
+  const idx = list.length - editItem.index - 1;
+  // console.log("new list at index", newlist[idx]);
+  newlist[idx] = {
+    email: editItem.email,
+    password: editItem.password,
+    website: editItem.website,
+  };
+  // console.log("final user list", newlist); //yha tk shi h code.
+  // User.replaceOne(
+  //   { email: email },
+  //   {
+  //     "list":[...newlist]
+  //   },
+  //   {upsert:true}
+  // );
+  const newUser = await User.findOne({ email: email });
+  newUser.list = newlist;
+  await newUser.save();
+  // console.log("final user", newUser);
+  res.send(newUser);
 });
+
+
 
 // --------------------------------------------------------------------------------------------------------------------
 

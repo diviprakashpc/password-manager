@@ -36,6 +36,7 @@ const Manager = () => {
                         website={key.website}
                         password={key.password}
                         itemindex={index}
+                        setCardList={setCardList}
                       />
                     </div>
                   );

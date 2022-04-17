@@ -1,6 +1,33 @@
+import { Axios } from "axios";
 import React from "react";
+import { useState, useContext } from "react";
 import "./Card.css";
+import { currentUser } from "../../App";
 const Card = (props) => {
+  const user = useContext(currentUser);
+  const [readonly, setReadOnly] = useState(true);
+  const [editItem, setEditItem] = useState({
+    email: "",
+    password: "",
+    website: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditItem({
+      ...editItem,
+      [name]: value,
+    });
+    console.log("Edit item changing", editItem);
+  };
+
+  const saveItem = () => {
+    Axios.post("http://localhost:3000/saveitem", { user, editItem })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <div>
@@ -13,10 +40,13 @@ const Card = (props) => {
               <input
                 class="form-control"
                 type="text"
-                value={`${props.website}`}
+                name="website"
+                value={
+                  readonly == false ? `${editItem.website}` : `${props.website}`
+                }
                 aria-label="Disabled input example"
-                disabled
-                readonly
+                readOnly={readonly}
+                onChange={handleChange}
               ></input>
             </div>
             <div id="email-field">
@@ -24,32 +54,46 @@ const Card = (props) => {
               <input
                 class="form-control"
                 type="text"
-                value={`${props.email}`}
+                name="email"
+                value={
+                  readonly == false ? `${editItem.email}` : `${props.email}`
+                }
                 aria-label="Disabled input example"
-                disabled
-                readonly
+                readOnly={readonly}
+                onChange={handleChange}
               ></input>
             </div>
             <div id="passowrd-field">
               <input
                 class="form-control"
                 type="text"
-                value={`${props.password}`}
+                name="password"
+                value={
+                  readonly == false
+                    ? `${editItem.password}`
+                    : `${props.password}`
+                }
                 aria-label="Disabled input example"
-                disabled
-                readonly
+                readOnly={readonly}
+                onChange={handleChange}
               ></input>
             </div>
           </div>
           <div id="card-footer">
             {" "}
-            <button className="btn btn-primary manager-card-btn">
+            <button
+              className="btn btn-primary manager-card-btn"
+              onClick={() => setReadOnly(true)}
+            >
               <img src="/save.png" alt="save icon"></img>
             </button>
             <button className="btn btn-primary manager-card-btn">
               <img src="/delete.png" alt="save icon"></img>
             </button>
-            <button className="btn btn-primary manager-card-btn">
+            <button
+              className="btn btn-primary manager-card-btn"
+              onClick={() => saveItem}
+            >
               <img src="/edit.png" alt="save icon"></img>
             </button>
           </div>

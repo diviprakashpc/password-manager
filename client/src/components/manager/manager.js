@@ -35,6 +35,7 @@ const Manager = () => {
                         email={key.email}
                         website={key.website}
                         password={key.password}
+                        itemindex={index}
                       />
                     </div>
                   );

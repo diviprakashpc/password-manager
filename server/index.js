@@ -77,14 +77,12 @@ app.post("/register", (req, res) => {
 
 app.post("/additem", (req, res) => {
   const { user, item } = req.body;
-  console.log("user reached at backend", user);
-
-  console.log("item reached at backend", item);
-
+  // console.log("user reached at backend", user);
+  // console.log("item reached at backend", item);
   User.findOne({ email: user.email }, (err, foundUser) => {
     if (foundUser) {
       const { name, email, password, list } = foundUser;
-      console.log("Found user", foundUser);
+      // console.log("Found user", foundUser);
       User.updateOne(
         { email: email },
         {

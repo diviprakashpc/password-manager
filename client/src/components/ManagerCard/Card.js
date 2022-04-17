@@ -1,4 +1,4 @@
-import { Axios } from "axios";
+import  Axios  from "axios";
 import React from "react";
 import { useState, useContext } from "react";
 import "./Card.css";
@@ -10,6 +10,7 @@ const Card = (props) => {
     email: "",
     password: "",
     website: "",
+    index:props.itemindex,
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +22,8 @@ const Card = (props) => {
   };
 
   const saveItem = () => {
-    Axios.post("http://localhost:3000/saveitem", { user, editItem })
+    console.log("hello")
+    Axios.post("http://localhost:9002/saveitem", { user, editItem })
       .then((res) => {})
       .catch((err) => {
         console.log(err);
@@ -83,7 +85,7 @@ const Card = (props) => {
             {" "}
             <button
               className="btn btn-primary manager-card-btn"
-              onClick={() => setReadOnly(true)}
+              onClick={saveItem}
             >
               <img src="/save.png" alt="save icon"></img>
             </button>
@@ -92,7 +94,7 @@ const Card = (props) => {
             </button>
             <button
               className="btn btn-primary manager-card-btn"
-              onClick={() => saveItem}
+              onClick={() => setReadOnly(false)}
             >
               <img src="/edit.png" alt="save icon"></img>
             </button>

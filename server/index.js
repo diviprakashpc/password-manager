@@ -96,13 +96,12 @@ app.post("/additem", (req, res) => {
           ],
         },
         () => {
-
-          User.findOne({email:user.email},(err,foundUser)=>{
-            if(foundUser) res.send(foundUser)
-            else{
-              console.log("error while sending response back on add card")
+          User.findOne({ email: user.email }, (err, foundUser) => {
+            if (foundUser) res.send(foundUser);
+            else {
+              console.log("error while sending response back on add card");
             }
-          })
+          });
           console.log("found user after update", foundUser);
         }
       );
@@ -110,6 +109,19 @@ app.post("/additem", (req, res) => {
       console.log("error during add item", err);
     }
   });
+});
+
+app.post("/saveitem", (req, res) => {
+  const { user, editItem } = req.body;
+  console.log("User reached at saveitem",user)
+  console.log("editItem reached at saveitem",editItem);
+  User.findOne({email:user.email},(err,foundUser)=>{
+    if(foundUser){
+         console.log("found user at saveitem",foundUser);
+    }else{
+      console.log(err);
+    }
+  })
 });
 
 // --------------------------------------------------------------------------------------------------------------------

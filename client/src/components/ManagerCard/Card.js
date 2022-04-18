@@ -5,6 +5,7 @@ import "./Card.css";
 import { currentUser } from "../../App";
 const Card = (props) => {
   const user = useContext(currentUser);
+  console.log("User at Card.js", user);
   const [readonly, setReadOnly] = useState(true);
   const [editItem, setEditItem] = useState({
     email: "",
@@ -25,6 +26,7 @@ const Card = (props) => {
   const saveItem = () => {
     console.log("hello");
     console.log("User at saveitem axios request", user);
+    console.log("Edit item at saveitem axios request", editItem);
     if (
       !(editItem.email === "") &&
       !(editItem.website === "") &&
@@ -33,7 +35,7 @@ const Card = (props) => {
       Axios.post("http://localhost:9002/saveitem", { user, editItem })
         .then((res) => {
           console.log("final user list recieved after saveitem", res.data.list);
-          setReadOnly(true);
+          // setReadOnly(true);    // dikkat ye line kr rahi hai.
         })
         .catch((err) => {
           console.log(err);

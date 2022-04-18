@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import "./Card.css";
 import { currentUser } from "../../App";
 const Card = (props) => {
+  console.log("popopopopop",props.itemindex)
   const user = useContext(currentUser);
   console.log("User at Card.js", user);
   const [readonly, setReadOnly] = useState(true);
@@ -11,7 +12,7 @@ const Card = (props) => {
     email: "",
     password: "",
     website: "",
-    index: props.itemindex,
+    itemindex: props.itemindex,
   });
 
   const handleChange = (e) => {
@@ -51,6 +52,8 @@ const Card = (props) => {
       index: props.itemindex,
     }).then((res) => {
       alert(res.data.message);
+      console.log(res.data.newUser);
+      props.setCardList(res.data.newUser.list);
     });
   };
 
@@ -68,7 +71,7 @@ const Card = (props) => {
                 type="text"
                 name="website"
                 value={
-                  readonly == false ? `${editItem.website}` : `${props.website}`
+                  readonly === false ? `${editItem.website}` : `${props.website}`
                 }
                 aria-label="Disabled input example"
                 readOnly={readonly}
@@ -82,7 +85,7 @@ const Card = (props) => {
                 type="text"
                 name="email"
                 value={
-                  readonly == false ? `${editItem.email}` : `${props.email}`
+                  readonly === false ? `${editItem.email}` : `${props.email}`
                 }
                 aria-label="Disabled input example"
                 readOnly={readonly}
@@ -95,7 +98,7 @@ const Card = (props) => {
                 type="text"
                 name="password"
                 value={
-                  readonly == false
+                  readonly === false
                     ? `${editItem.password}`
                     : `${props.password}`
                 }

@@ -4,10 +4,10 @@ import Navbar from "../Navbar/navbar";
 import ManagerCard from "../ManagerCard/Card";
 import AddCard from "../AddCard/AddCard";
 import { useContext } from "react";
-import { currentUser, setsLoginUser } from "../../App";
+import { currentUser } from "../../App";
 const Manager = () => {
   const user = useContext(currentUser);
-  const setLoginUser = useContext(setsLoginUser);
+  
   const [cardList, setCardList] = useState(user.list);
   const [page, setPage] = useState(0);
   // console.log("Initial List of user",user.list,"cardList intial",cardList.length);
@@ -32,11 +32,10 @@ const Manager = () => {
                   return (
                     <div className="col-lg-15">
                       <ManagerCard
-                       index = {index}
                         email={key.email}
                         website={key.website}
                         password={key.password}
-                        itemindex={index}
+                        itemindex={index+(page*10)}
                         setCardList={setCardList}
                       />
                     </div>

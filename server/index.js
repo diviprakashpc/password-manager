@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import encrypt from "mongoose-encryption";
@@ -118,7 +118,8 @@ app.post("/saveitem", async (req, res) => {
   console.log("user at save item",user);
   console.log("edit item at /saveitem",editItem);
   const newlist = user.list.slice(0);
-  const idx = list.length - editItem.index - 1;
+  console.log(editItem.itemindex);
+  const idx = list.length - editItem.itemindex - 1;
 
   newlist[idx] = {
     email: editItem.email,
@@ -134,6 +135,23 @@ app.post("/saveitem", async (req, res) => {
   res.send(newUser);
 });
 
+app.post("/deleteItem",async (req,res)=>{
+   const {user , index } = req.body;
+     
+    const newUser = await User.findOne({email:user.email});
+    console.log("index",index);
+    const idx = newUser.list.length-1-index;
+    console.log("idx",idx);
+    const newList = newUser.list.slice(0).filter((key,i)=>{
+      return i!=idx;
+    })
+     
+
+    newUser.list = newList;
+    await newUser.save();
+    
+    res.send({message:"Deleted",newUser:newUser});
+})
 
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@ import { currentUser, setsLoginUser } from "../../App";
 import Axios from "axios";
 const AddCard = ({ setCardList }) => {
   const user = useContext(currentUser);
-  console.log("User whose session is there", user);
+  // console.log("User whose session is there", user);
   const [item, setItem] = useState({
     email: "",
     website: "",
@@ -27,7 +27,7 @@ const AddCard = ({ setCardList }) => {
       Axios.post("http://localhost:9002/additem", { user, item })
         .then((res) => {
           console.log(res.data);
-          console.log("User sent back by the add card post request", res.data);
+          // console.log("User sent back by the add card post request", res.data);
           setCardList(res.data.list);
         })
         .catch((error) => {

@@ -77,14 +77,12 @@ app.post("/register", (req, res) => {
 
 app.post("/additem", (req, res) => {
   const { user, item } = req.body;
-  console.log("user reached at backend", user);
-
-  console.log("item reached at backend", item);
-
+  // console.log("user reached at backend", user);
+  // console.log("item reached at backend", item);
   User.findOne({ email: user.email }, (err, foundUser) => {
     if (foundUser) {
       const { name, email, password, list } = foundUser;
-      console.log("Found user", foundUser);
+      // console.log("Found user", foundUser);
       User.updateOne(
         { email: email },
         {
@@ -98,13 +96,12 @@ app.post("/additem", (req, res) => {
           ],
         },
         () => {
-
-          User.findOne({email:user.email},(err,foundUser)=>{
-            if(foundUser) res.send(foundUser)
-            else{
-              console.log("error while sending response back on add card")
+          User.findOne({ email: user.email }, (err, foundUser) => {
+            if (foundUser) res.send(foundUser);
+            else {
+              console.log("error while sending response back on add card");
             }
-          })
+          });
           console.log("found user after update", foundUser);
         }
       );
@@ -113,6 +110,36 @@ app.post("/additem", (req, res) => {
     }
   });
 });
+
+app.post("/saveitem", async (req, res) => {
+  const { user, editItem } = req.body;
+  const { email, list } = user;
+  // console.log("User reached at saveitem", user);
+  // console.log("editItem reached at saveitem", editItem);
+  const newlist = user.list.slice(0);
+  const idx = list.length - editItem.index - 1;
+  // console.log("new list at index", newlist[idx]);
+  newlist[idx] = {
+    email: editItem.email,
+    password: editItem.password,
+    website: editItem.website,
+  };
+  // console.log("final user list", newlist); //yha tk shi h code.
+  // User.replaceOne(
+  //   { email: email },
+  //   {
+  //     "list":[...newlist]
+  //   },
+  //   {upsert:true}
+  // );
+  const newUser = await User.findOne({ email: email });
+  newUser.list = newlist;
+  await newUser.save();
+  // console.log("final user", newUser);
+  res.send(newUser);
+});
+
+
 
 // --------------------------------------------------------------------------------------------------------------------
 

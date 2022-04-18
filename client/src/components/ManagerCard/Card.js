@@ -12,7 +12,7 @@ const Card = (props) => {
     website: "",
     index: props.itemindex,
   });
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditItem({
@@ -24,22 +24,33 @@ const Card = (props) => {
 
   const saveItem = () => {
     console.log("hello");
-    Axios.post("http://localhost:9002/saveitem", { user, editItem })
-      .then((res) => {
-        console.log("final user list recieved after saveitem",res.data.list);
-         setReadOnly(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log("User at saveitem axios request", user);
+    if (
+      !(editItem.email === "") &&
+      !(editItem.website === "") &&
+      !(editItem.password === "")
+    ) {
+      Axios.post("http://localhost:9002/saveitem", { user, editItem })
+        .then((res) => {
+          console.log("final user list recieved after saveitem", res.data.list);
+          setReadOnly(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert("Enter valid input");
+    }
   };
 
-  const deleteItem = ()=>{
-    Axios.post("http://localhost:9002/deleteitem",{user,index:props.itemindex})
-    .then((res)=>{
-           alert(res.data.message); 
-    })
-  }
+  const deleteItem = () => {
+    Axios.post("http://localhost:9002/deleteitem", {
+      user,
+      index: props.itemindex,
+    }).then((res) => {
+      alert(res.data.message);
+    });
+  };
 
   return (
     <div>
@@ -97,17 +108,22 @@ const Card = (props) => {
             <button
               className="btn btn-primary manager-card-btn"
               onClick={saveItem}
+              disabled={readonly}
             >
               <img src="/save.png" alt="save icon"></img>
             </button>
-            <button className="btn btn-primary manager-card-btn" onClick={deleteItem}>
-              <img src="/delete.png" alt="save icon"></img>
+            <button
+              className="btn btn-primary manager-card-btn"
+              onClick={deleteItem}
+            >
+              <img src="/delete.png" alt="delete icon"></img>
             </button>
             <button
               className="btn btn-primary manager-card-btn"
               onClick={() => setReadOnly(false)}
+              disabled={!readonly}
             >
-              <img src="/edit.png" alt="save icon"></img>
+              <img src="/edit.png" alt="edit icon"></img>
             </button>
           </div>
         </div>

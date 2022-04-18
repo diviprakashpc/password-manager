@@ -1,42 +1,46 @@
 import Axios from "axios";
-import React, { useState, useContext } from "react";
+import React from "react";
+import { useState, useContext } from "react";
 import "./Card.css";
-import { currentUser, setsLoginUser } from "../../App";
+import { currentUser } from "../../App";
 const Card = (props) => {
   const user = useContext(currentUser);
-
-  const [readOnly, setReadOnly] = useState(true);
+  const [readonly, setReadOnly] = useState(true);
   const [editItem, setEditItem] = useState({
-    website: `${props.website}`,
-    email: `${props.email}`,
-    password: `${props.password}`,
+    email: "",
+    password: "",
+    website: "",
+    index: props.itemindex,
   });
-  const saveCard = () => {
-    console.log("Reached savecard");
-    const { website, email, password } = editItem;
-    if (website && email && password) {
-      Axios.post("http://localhost:9002/saveitem", { user, editItem }).then(
-        (res) => {
-          setReadOnly(true);
-          console.log(
-            "Data recieved from server after post save request",
-            res.data
-          );
-        }
-      );
-    } else {
-      console.log("Enter valid input before saving");
-    }
-  };
-
+  
   const handleChange = (e) => {
-    console.log(editItem);
     const { name, value } = e.target;
     setEditItem({
       ...editItem,
       [name]: value,
     });
+    console.log("Edit item changing", editItem);
   };
+
+  const saveItem = () => {
+    console.log("hello");
+    Axios.post("http://localhost:9002/saveitem", { user, editItem })
+      .then((res) => {
+        console.log("final user list recieved after saveitem",res.data.list);
+         setReadOnly(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deleteItem = ()=>{
+    Axios.post("http://localhost:9002/deleteitem",{user,index:props.itemindex})
+    .then((res)=>{
+           alert(res.data.message); 
+    })
+  }
+
   return (
     <div>
       <div>
@@ -50,9 +54,11 @@ const Card = (props) => {
                 class="form-control"
                 type="text"
                 name="website"
-                value={editItem.website}
+                value={
+                  readonly == false ? `${editItem.website}` : `${props.website}`
+                }
                 aria-label="Disabled input example"
-                disabled={readOnly}
+                readOnly={readonly}
                 onChange={handleChange}
               ></input>
             </div>
@@ -62,9 +68,11 @@ const Card = (props) => {
                 class="form-control"
                 type="text"
                 name="email"
-                value={editItem.email}
+                value={
+                  readonly == false ? `${editItem.email}` : `${props.email}`
+                }
                 aria-label="Disabled input example"
-                disabled={readOnly}
+                readOnly={readonly}
                 onChange={handleChange}
               ></input>
             </div>
@@ -73,9 +81,13 @@ const Card = (props) => {
                 class="form-control"
                 type="text"
                 name="password"
-                value={editItem.password}
+                value={
+                  readonly == false
+                    ? `${editItem.password}`
+                    : `${props.password}`
+                }
                 aria-label="Disabled input example"
-                disabled={readOnly}
+                readOnly={readonly}
                 onChange={handleChange}
               ></input>
             </div>
@@ -84,20 +96,18 @@ const Card = (props) => {
             {" "}
             <button
               className="btn btn-primary manager-card-btn"
-              onClick={saveCard}
+              onClick={saveItem}
             >
               <img src="/save.png" alt="save icon"></img>
             </button>
-            <button className="btn btn-primary manager-card-btn">
-              <img src="/delete.png" alt="delete icon"></img>
+            <button className="btn btn-primary manager-card-btn" onClick={deleteItem}>
+              <img src="/delete.png" alt="save icon"></img>
             </button>
             <button
               className="btn btn-primary manager-card-btn"
-              onClick={() => {
-                setReadOnly(false);
-              }}
+              onClick={() => setReadOnly(false)}
             >
-              <img src="/edit.png" alt="edit icon"></img>
+              <img src="/edit.png" alt="save icon"></img>
             </button>
           </div>
         </div>

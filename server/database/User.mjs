@@ -11,4 +11,4 @@ const userSchema = new Schema({
   list: { type: Array, require: true },
 });
 
- export default mongoose.model("UserModel", userSchema);
+ export default mongoose.model("User", userSchema);

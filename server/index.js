@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 import "dotenv/config";
 import session from "express-session";
-import UserModel from "./database/User.mjs";
+import User from "./database/User.mjs";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
@@ -36,7 +36,7 @@ mongoose.connect(
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  UserModel.findOne({ email: email }, (err, user) => {
+  User.findOne({ email: email }, (err, user) => {
     if (user) {
       if (password === user.password) {
         res.send({ message: "Login Successful", user: user });
@@ -51,11 +51,11 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password, list } = req.body;
-  UserModel.findOne({ email: email }, (err, foundUser) => {
+  User.findOne({ email: email }, (err, foundUser) => {
     if (foundUser) {
       res.send({ message: "User already registered" });
     } else {
-      const user = new UserModel({
+      const user = new User({
         name,
         email,
         list,
@@ -78,11 +78,11 @@ app.post("/additem", (req, res) => {
   const { user, item } = req.body;
   // console.log("user reached at backend", user);
   // console.log("item reached at backend", item);
-  UserModel.findOne({ email: user.email }, (err, foundUser) => {
+  User.findOne({ email: user.email }, (err, foundUser) => {
     if (foundUser) {
       const { name, email, password, list } = foundUser;
       // console.log("Found user", foundUser);
-      UserModel.updateOne(
+      User.updateOne(
         { email: email },
         {
           list: [
@@ -95,7 +95,7 @@ app.post("/additem", (req, res) => {
           ],
         },
         () => {
-          UserModel.findOne({ email: user.email }, (err, foundUser) => {
+          User.findOne({ email: user.email }, (err, foundUser) => {
             if (foundUser) res.send(foundUser);
             else {
               console.log("error while sending response back on add card");
@@ -127,7 +127,7 @@ app.post("/saveitem", async (req, res) => {
   };
   console.log("currentlist", user.list);
   console.log("newlist", newlist);
-  const newUser = await UserModel.findOne({ email: email });
+  const newUser = await User.findOne({ email: email });
   newUser.list = newlist;
   await newUser.save();
   console.log("final user", newUser);
@@ -137,7 +137,7 @@ app.post("/saveitem", async (req, res) => {
 app.post("/deleteItem", async (req, res) => {
   const { user, index } = req.body;
 
-  const newUser = await UserModel.findOne({ email: user.email });
+  const newUser = await User.findOne({ email: user.email });
   console.log("index", index);
   const idx = newUser.list.length - 1 - index;
   console.log("idx", idx);

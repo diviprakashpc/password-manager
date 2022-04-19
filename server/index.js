@@ -5,7 +5,7 @@ import encrypt from "mongoose-encryption";
 import "dotenv/config";
 import session from "express-session";
 import passport from "passport";
-import passportLocalMongoose from "passport-local-session";
+import passportLocalMongoose from "passport-local-mongoose";
 
 const app = express();
 app.use(express.json());
@@ -69,26 +69,26 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password, list } = req.body;
-  // User.findOne({ email: email }, (err, foundUser) => {
-  //   if (foundUser) {
-  //     res.send({ message: "User already registered" });
-  //   } else {
-  //     const user = new User({
-  //       name,
-  //       email,
-  //       list,
-  //       password,
-  //     });
-  //     console.log("regsitration user", user);
-  //     user.save((err) => {
-  //       if (err) {
-  //         res.send(err);
-  //       } else {
-  //         res.send({ message: "Succesfully Regsitered" });
-  //       }
-  //     });
-  //   }
-  // });
+  User.findOne({ email: email }, (err, foundUser) => {
+    if (foundUser) {
+      res.send({ message: "User already registered" });
+    } else {
+      const user = new User({
+        name,
+        email,
+        list,
+        password,
+      });
+      console.log("regsitration user", user);
+      user.save((err) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send({ message: "Succesfully Regsitered" });
+        }
+      });
+    }
+  });
   // User.register({username:email},password,())
   // sadknjkdnasdnaksjdnajksn
 });

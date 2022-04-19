@@ -3,10 +3,24 @@ import cors from "cors";
 import mongoose from "mongoose";
 import encrypt from "mongoose-encryption";
 import "dotenv/config";
+import session from "express-session";
+import passport from "passport";
+import passportLocalMongoose from "passport-local-session";
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 mongoose.connect(
   "mongodb://localhost:27017/userLogin",
@@ -25,7 +39,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   list: Array,
 });
-
+userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(encrypt, {
   encryptionKey: process.env.SECRET,
   signingKey: process.env.SECRET2,
@@ -33,7 +47,9 @@ userSchema.plugin(encrypt, {
 });
 
 const User = new mongoose.model("User", userSchema);
-
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 //Routes
 
 app.post("/login", (req, res) => {
@@ -53,26 +69,27 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password, list } = req.body;
-  User.findOne({ email: email }, (err, foundUser) => {
-    if (foundUser) {
-      res.send({ message: "User already registered" });
-    } else {
-      const user = new User({
-        name,
-        email,
-        list,
-        password,
-      });
-      console.log("regsitration user", user);
-      user.save((err) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send({ message: "Succesfully Regsitered" });
-        }
-      });
-    }
-  });
+  // User.findOne({ email: email }, (err, foundUser) => {
+  //   if (foundUser) {
+  //     res.send({ message: "User already registered" });
+  //   } else {
+  //     const user = new User({
+  //       name,
+  //       email,
+  //       list,
+  //       password,
+  //     });
+  //     console.log("regsitration user", user);
+  //     user.save((err) => {
+  //       if (err) {
+  //         res.send(err);
+  //       } else {
+  //         res.send({ message: "Succesfully Regsitered" });
+  //       }
+  //     });
+  //   }
+  // });
+  // User.register({username:email},password,())
 });
 
 app.post("/additem", (req, res) => {
@@ -112,11 +129,11 @@ app.post("/additem", (req, res) => {
 });
 
 app.post("/saveitem", async (req, res) => {
-  console.log("reached server saveitem")
+  console.log("reached server saveitem");
   const { user, editItem } = req.body;
   const { email, list } = user;
-  console.log("user at save item",user);
-  console.log("edit item at /saveitem",editItem);
+  console.log("user at save item", user);
+  console.log("edit item at /saveitem", editItem);
   const newlist = user.list.slice(0);
   console.log(editItem.itemindex);
   const idx = list.length - editItem.itemindex - 1;
@@ -126,8 +143,8 @@ app.post("/saveitem", async (req, res) => {
     password: editItem.password,
     website: editItem.website,
   };
- console.log("currentlist",user.list);
- console.log("newlist",newlist)
+  console.log("currentlist", user.list);
+  console.log("newlist", newlist);
   const newUser = await User.findOne({ email: email });
   newUser.list = newlist;
   await newUser.save();
@@ -135,24 +152,22 @@ app.post("/saveitem", async (req, res) => {
   res.send(newUser);
 });
 
-app.post("/deleteItem",async (req,res)=>{
-   const {user , index } = req.body;
-     
-    const newUser = await User.findOne({email:user.email});
-    console.log("index",index);
-    const idx = newUser.list.length-1-index;
-    console.log("idx",idx);
-    const newList = newUser.list.slice(0).filter((key,i)=>{
-      return i!=idx;
-    })
-     
+app.post("/deleteItem", async (req, res) => {
+  const { user, index } = req.body;
 
-    newUser.list = newList;
-    await newUser.save();
-    
-    res.send({message:"Deleted",newUser:newUser});
-})
+  const newUser = await User.findOne({ email: user.email });
+  console.log("index", index);
+  const idx = newUser.list.length - 1 - index;
+  console.log("idx", idx);
+  const newList = newUser.list.slice(0).filter((key, i) => {
+    return i != idx;
+  });
 
+  newUser.list = newList;
+  await newUser.save();
+
+  res.send({ message: "Deleted", newUser: newUser });
+});
 
 // --------------------------------------------------------------------------------------------------------------------
 

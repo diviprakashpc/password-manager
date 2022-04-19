@@ -1,12 +1,10 @@
 import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import encrypt from "mongoose-encryption";
+
 import "dotenv/config";
 import session from "express-session";
-import passport from "passport";
-import passportLocalMongoose from "passport-local-mongoose";
-
+import User from "./database/User.mjs";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
@@ -19,8 +17,7 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 mongoose.connect(
   "mongodb://localhost:27017/userLogin",
@@ -33,24 +30,9 @@ mongoose.connect(
   }
 );
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  list: Array,
-});
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(encrypt, {
-  encryptionKey: process.env.SECRET,
-  signingKey: process.env.SECRET2,
-  encryptedFields: ["password"],
-});
+//----------------GET REQUESTS-------------------//
 
-const User = new mongoose.model("User", userSchema);
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-//Routes
+// -----------------Post REQUESTS_---------------------------
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -89,11 +71,10 @@ app.post("/register", (req, res) => {
       });
     }
   });
-  // User.register({username:email},password,())
-  // sadknjkdnasdnaksjdnajksn
 });
 
 app.post("/additem", (req, res) => {
+  console.log("hello")
   const { user, item } = req.body;
   // console.log("user reached at backend", user);
   // console.log("item reached at backend", item);

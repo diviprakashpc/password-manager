@@ -23,7 +23,7 @@ const AddCard = ({ setCardList }) => {
   const addPassword = () => {
     const { email, website, password } = item;
     if (email && website && password) {
-      // console.log("usersending post request",user);
+      console.log("usersending post request",user);
       Axios.post("http://localhost:9002/additem", { user, item })
         .then((res) => {
           console.log(res.data);

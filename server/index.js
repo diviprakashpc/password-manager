@@ -1,12 +1,10 @@
 import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import encrypt from "mongoose-encryption";
+
 import "dotenv/config";
 import session from "express-session";
-import passport from "passport";
-import passportLocalMongoose from "passport-local-session";
-
+import UserModel from "./database/User.mjs";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
@@ -19,8 +17,7 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 mongoose.connect(
   "mongodb://localhost:27017/userLogin",
@@ -33,28 +30,13 @@ mongoose.connect(
   }
 );
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  list: Array,
-});
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(encrypt, {
-  encryptionKey: process.env.SECRET,
-  signingKey: process.env.SECRET2,
-  encryptedFields: ["password"],
-});
+//----------------GET REQUESTS-------------------//
 
-const User = new mongoose.model("User", userSchema);
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-//Routes
+// -----------------Post REQUESTS_---------------------------
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email: email }, (err, user) => {
+  UserModel.findOne({ email: email }, (err, user) => {
     if (user) {
       if (password === user.password) {
         res.send({ message: "Login Successful", user: user });
@@ -69,39 +51,38 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password, list } = req.body;
-  // User.findOne({ email: email }, (err, foundUser) => {
-  //   if (foundUser) {
-  //     res.send({ message: "User already registered" });
-  //   } else {
-  //     const user = new User({
-  //       name,
-  //       email,
-  //       list,
-  //       password,
-  //     });
-  //     console.log("regsitration user", user);
-  //     user.save((err) => {
-  //       if (err) {
-  //         res.send(err);
-  //       } else {
-  //         res.send({ message: "Succesfully Regsitered" });
-  //       }
-  //     });
-  //   }
-  // });
-  // User.register({username:email},password,())
-  // sadknjkdnasdnaksjdnajksn
+  UserModel.findOne({ email: email }, (err, foundUser) => {
+    if (foundUser) {
+      res.send({ message: "User already registered" });
+    } else {
+      const user = new UserModel({
+        name,
+        email,
+        list,
+        password,
+      });
+      console.log("regsitration user", user);
+      user.save((err) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send({ message: "Succesfully Regsitered" });
+        }
+      });
+    }
+  });
 });
 
 app.post("/additem", (req, res) => {
+  console.log("hello")
   const { user, item } = req.body;
   // console.log("user reached at backend", user);
   // console.log("item reached at backend", item);
-  User.findOne({ email: user.email }, (err, foundUser) => {
+  UserModel.findOne({ email: user.email }, (err, foundUser) => {
     if (foundUser) {
       const { name, email, password, list } = foundUser;
       // console.log("Found user", foundUser);
-      User.updateOne(
+      UserModel.updateOne(
         { email: email },
         {
           list: [
@@ -114,7 +95,7 @@ app.post("/additem", (req, res) => {
           ],
         },
         () => {
-          User.findOne({ email: user.email }, (err, foundUser) => {
+          UserModel.findOne({ email: user.email }, (err, foundUser) => {
             if (foundUser) res.send(foundUser);
             else {
               console.log("error while sending response back on add card");
@@ -146,7 +127,7 @@ app.post("/saveitem", async (req, res) => {
   };
   console.log("currentlist", user.list);
   console.log("newlist", newlist);
-  const newUser = await User.findOne({ email: email });
+  const newUser = await UserModel.findOne({ email: email });
   newUser.list = newlist;
   await newUser.save();
   console.log("final user", newUser);
@@ -156,7 +137,7 @@ app.post("/saveitem", async (req, res) => {
 app.post("/deleteItem", async (req, res) => {
   const { user, index } = req.body;
 
-  const newUser = await User.findOne({ email: user.email });
+  const newUser = await UserModel.findOne({ email: user.email });
   console.log("index", index);
   const idx = newUser.list.length - 1 - index;
   console.log("idx", idx);

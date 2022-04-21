@@ -31,13 +31,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
-  width: 50vw;
-  height: 70vh;
-  border-radius: 0px;
-  box-shadow: 0 0 15px 5px grey;
+  width: 55vw;
+  height: 75vh;
+  border-radius: 8px;
+  box-shadow: 0 0 15px 0px grey;
   background-color: #ffffff;
-  
   position: relative;
 }
 

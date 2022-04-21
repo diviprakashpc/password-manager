@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center;
   /* background: #d8d8d8; */
-  background: #f0f2f5 ;
+  /* background: #f0f2f5 ; */
+  background: url("../public/wall.png");
   font-family: Arial, sans-serif;
 }

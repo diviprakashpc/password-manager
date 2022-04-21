@@ -21,7 +21,7 @@ const Homepage = ({ setLoginUser }) => {
         </div>
         <div id="section2-home">
           <Card
-            source="https://www.101computing.net/wp/wp-content/uploads/password.png"
+            source="/passwordmanager.png"
             alternate="Manager Image"
             setLoginUser={setLoginUser}
             text="Manager"
@@ -29,7 +29,7 @@ const Homepage = ({ setLoginUser }) => {
             path="/manager"
           />
           <Card
-            source="https://media.istockphoto.com/photos/password-management-weak-and-strong-password-picture-id840534924?k=20&m=840534924&s=612x612&w=0&h=mxsMLXFebd2io3DirjQQL2ulob9JOLmW-5C9RONdsIw="
+            source="/genrator.jpg"
             alternate="Generator Image"
             setLoginUser={setLoginUser}
             text="Generator"
@@ -38,7 +38,7 @@ const Homepage = ({ setLoginUser }) => {
           />
 
           <Card
-            source="https://media.istockphoto.com/photos/password-management-weak-and-strong-password-picture-id840534924?k=20&m=840534924&s=612x612&w=0&h=mxsMLXFebd2io3DirjQQL2ulob9JOLmW-5C9RONdsIw="
+            source="/casestudy.png"
             alternate="CaseStudies Image"
             setLoginUser={setLoginUser}
             text="Case Studies"

@@ -17,8 +17,6 @@ app.use(
   })
 );
 
-
-
 mongoose.connect(
   "mongodb://localhost:27017/userLogin",
   {
@@ -34,80 +32,66 @@ mongoose.connect(
 
 // -----------------Post REQUESTS_---------------------------
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email: email }, (err, user) => {
-    if (user) {
-      if (password === user.password) {
-        res.send({ message: "Login Successful", user: user });
-      } else {
-        res.send({ message: "Password didn't match" });
-      }
+
+  const user = await User.findOne({ email: email });
+
+  if (user) {
+    if (password === user.password) {
+      res.send({ message: "Login successful", user: user });
     } else {
-      res.send({ message: "User not registered" });
+      res.send({ message: "Password didn't match" });
     }
-  });
+  } else {
+    res.send({ message: "User not registered" });
+  }
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
   const { name, email, password, list } = req.body;
-  User.findOne({ email: email }, (err, foundUser) => {
-    if (foundUser) {
-      res.send({ message: "User already registered" });
-    } else {
-      const user = new User({
-        name,
-        email,
-        list,
-        password,
-      });
-      console.log("regsitration user", user);
-      user.save((err) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send({ message: "Succesfully Regsitered" });
-        }
-      });
-    }
-  });
+
+  const user = await User.findOne({ email: email });
+  if (user) {
+    res.send({ message: "User already registered" });
+  } else {
+    const user = new User({
+      name,
+      email,
+      list,
+      password,
+    });
+
+    await user.save((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send({ message: "Successfully Registered" });
+      }
+    });
+  }
 });
 
-app.post("/additem", (req, res) => {
-  console.log("hello")
+app.post("/additem", async (req, res) => {
+  console.log("hello");
   const { user, item } = req.body;
-  // console.log("user reached at backend", user);
-  // console.log("item reached at backend", item);
-  User.findOne({ email: user.email }, (err, foundUser) => {
-    if (foundUser) {
-      const { name, email, password, list } = foundUser;
-      // console.log("Found user", foundUser);
-      User.updateOne(
-        { email: email },
-        {
-          list: [
-            ...list,
-            {
-              email: `${item["email"]}`,
-              website: `${item["website"]}`,
-              password: `${item["password"]}`,
-            },
-          ],
-        },
-        () => {
-          User.findOne({ email: user.email }, (err, foundUser) => {
-            if (foundUser) res.send(foundUser);
-            else {
-              console.log("error while sending response back on add card");
-            }
-          });
-          console.log("found user after update", foundUser);
-        }
-      );
-    } else {
-      console.log("error during add item", err);
-    }
-  });
+
+  const foundUser = await User.findOne({ email: user.email });
+  if (foundUser) {
+    foundUser.list = [
+      ...foundUser.list,
+      {
+        email: item["email"],
+        website: item["website"],
+        password: item["password"],
+      },
+    ];
+    console.log("User after update", foundUser);
+    await foundUser.save();
+    res.send(foundUser);
+  } else {
+    console.log("Error during add item");
+  }
 });
 
 app.post("/saveitem", async (req, res) => {
@@ -122,8 +106,8 @@ app.post("/saveitem", async (req, res) => {
 
   newlist[idx] = {
     email: editItem.email,
-    password: editItem.password,
     website: editItem.website,
+    password: editItem.password,
   };
   console.log("currentlist", user.list);
   console.log("newlist", newlist);

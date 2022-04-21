@@ -11,11 +11,7 @@ const Manager = () => {
   const [cardList, setCardList] = useState(user.list);
   
   const [page, setPage] = useState(0);
-  // console.log("Initial List of user",user.list,"cardList intial",cardList.length);
-  // console.log("user at manager", user);
-  //90-99(range of index of element)->9(page)
-  //100-109->10
-  //180-189->18
+
   return (
     <>
       <div id="manager">

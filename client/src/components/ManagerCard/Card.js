@@ -2,11 +2,11 @@ import Axios from "axios";
 import React from "react";
 import { useState, useContext } from "react";
 import "./Card.css";
-import { currentUser } from "../../App";
+import { currentUser,setsLoginUser } from "../../App";
 const Card = (props) => {
   console.log("popopopopop",props.itemindex)
   const user = useContext(currentUser);
-  console.log("User at Card.js", user);
+  const setLoginUser = useContext(setsLoginUser)
   const [readonly, setReadOnly] = useState(true);
   const [editItem, setEditItem] = useState({
     email: "",
@@ -21,7 +21,7 @@ const Card = (props) => {
       ...editItem,
       [name]: value,
     });
-    console.log("Edit item changing", editItem);
+   
   };
 
   const saveItem = () => {
@@ -36,7 +36,6 @@ const Card = (props) => {
       Axios.post("http://localhost:9002/saveitem", { user, editItem })
         .then((res) => {
           console.log("final user list recieved after saveitem", res.data.list);
-          // setReadOnly(true);    // dikkat ye line kr rahi hai.
         })
         .catch((err) => {
           console.log(err);
@@ -52,8 +51,8 @@ const Card = (props) => {
       index: props.itemindex,
     }).then((res) => {
       alert(res.data.message);
-      console.log(res.data.newUser);
-      props.setCardList(res.data.newUser.list);
+      console.log("After delete",res.data.newUser);
+      setLoginUser(res.data.newUser);
     });
   };
 

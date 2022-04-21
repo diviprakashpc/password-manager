@@ -1,5 +1,4 @@
 import React, { createContext } from "react";
-//import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
@@ -11,8 +10,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
-  useNavigate,
 } from "react-router-dom";
 import { useState } from "react";
 const currentUser = createContext();

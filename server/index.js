@@ -101,9 +101,9 @@ app.post("/saveitem", async (req, res) => {
   console.log("user at save item", user);
   console.log("edit item at /saveitem", editItem);
   const newlist = user.list.slice(0);
-  console.log(editItem.itemindex);
+  console.log("Index of item to be edited",editItem.itemindex);
   const idx = list.length - editItem.itemindex - 1;
-
+  console.log("Actual index",idx)
   newlist[idx] = {
     email: editItem.email,
     website: editItem.website,

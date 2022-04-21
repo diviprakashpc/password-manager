@@ -9,6 +9,7 @@ const Manager = () => {
   const user = useContext(currentUser);
   
   const [cardList, setCardList] = useState(user.list);
+  
   const [page, setPage] = useState(0);
   // console.log("Initial List of user",user.list,"cardList intial",cardList.length);
   // console.log("user at manager", user);

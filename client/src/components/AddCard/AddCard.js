@@ -5,6 +5,7 @@ import { currentUser, setsLoginUser } from "../../App";
 import Axios from "axios";
 const AddCard = ({ setCardList }) => {
   const user = useContext(currentUser);
+  const setLoginUser = useContext(setsLoginUser)
   // console.log("User whose session is there", user);
   const [item, setItem] = useState({
     email: "",
@@ -28,7 +29,7 @@ const AddCard = ({ setCardList }) => {
         .then((res) => {
           console.log(res.data);
           // console.log("User sent back by the add card post request", res.data);
-          setCardList(res.data.list);
+          setLoginUser(res.data.foundUser);
         })
         .catch((error) => {
           console.log("Error occured while adding", error);

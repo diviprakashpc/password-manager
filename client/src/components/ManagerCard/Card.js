@@ -110,20 +110,20 @@ const Card = (props) => {
           <div id="card-footer">
             {" "}
             <button
-              className="btn btn-primary manager-card-btn"
+              className="btn btn-primary manager-card-btn manager-card-save-btn"
               onClick={saveItem}
               disabled={readonly}
             >
               <img src="/save.png" alt="save icon"></img>
             </button>
             <button
-              className="btn btn-primary manager-card-btn"
+              className="btn btn-primary manager-card-btn manager-card-delete-btn"
               onClick={deleteItem}
             >
               <img src="/delete.png" alt="delete icon"></img>
             </button>
             <button
-              className="btn btn-primary manager-card-btn"
+              className="btn btn-primary manager-card-btn manager-card-edit-btn"
               onClick={() => setReadOnly(false)}
               disabled={!readonly}
             >

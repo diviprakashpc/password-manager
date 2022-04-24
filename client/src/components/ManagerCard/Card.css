@@ -36,6 +36,14 @@
   box-shadow: 0 0 15px 5px grey;
 }
 
+.manager-card-edit-btn:disabled{
+  background-color: white;
+}
+
+.manager-card-save-btn:disabled{
+  background-color: white;
+}
+
 #email-field {
   display: flex;
   margin-bottom: 10px;

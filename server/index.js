@@ -1,7 +1,7 @@
 import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-
+import bcrypt from "bcryptjs";
 import "dotenv/config";
 import session from "express-session";
 import User from "./database/User.mjs";
@@ -36,9 +36,9 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email: email });
-
+  
   if (user) {
-    if (password === user.password) {
+    if (bcrypt.compareSync(password,user.password)) {
       res.send({ message: "Login successful", user: user });
     } else {
       res.send({ message: "Password didn't match" });
@@ -50,7 +50,8 @@ app.post("/login", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   const { name, email, password, list } = req.body;
-
+  var salt = bcrypt.genSaltSync(12);
+  var hash = bcrypt.hashSync(password,salt);
   const user = await User.findOne({ email: email });
   if (user) {
     res.send({ message: "User already registered" });
@@ -59,7 +60,7 @@ app.post("/register", async (req, res) => {
       name,
       email,
       list,
-      password,
+      password:hash,
     });
 
     await user.save((err) => {
